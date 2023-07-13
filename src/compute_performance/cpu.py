@@ -23,7 +23,7 @@ class Cpu:
     cpus: list
 
 
-def get_cpu_stats():
+def get_cpu_info():
     # Reference: https://psutil.readthedocs.io/en/latest/#cpu
 
     # Gather measurements
@@ -55,7 +55,7 @@ def get_cpu_stats():
 
 
 def main():
-    print(get_cpu_stats())
+    print(get_cpu_info())
 
 
 if __name__ == '__main__':
