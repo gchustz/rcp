@@ -17,9 +17,12 @@ add_message_files(
     cpu.msg
     cpucore.msg
     cputimes.msg
+    memory.msg
+    swap.msg
     disks.msg 
     diskpartition.msg
-
+    networkinterface.msg
+    temperaturesensor.msg
 )
 
 # Generate messages

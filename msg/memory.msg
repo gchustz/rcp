@@ -1,0 +1,11 @@
+float32 percent 
+uint64 total 
+uint64 available 
+uint64 used 
+uint64 free 
+uint64 active 
+uint64 inactive
+uint64 buffers
+uint64 cached 
+uint64 shared
+uint64 slab
