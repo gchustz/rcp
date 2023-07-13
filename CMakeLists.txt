@@ -14,15 +14,18 @@ catkin_python_setup()
 add_message_files(
     DIRECTORY msg
     FILES 
+    cpu.msg
+    cpucore.msg
+    cputimes.msg
+    disks.msg 
+    diskpartition.msg
 
 )
 
 # Generate messages
 generate_messages(
     DEPENDENCIES
-    std_msgs
-    
-
+    rcp
 )
 
 # Catkin specific configuration

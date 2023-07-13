@@ -1,0 +1,9 @@
+string name
+uint64 read_count 
+uint64 write_count 
+uint64 read_bytes 
+uint64 write_bytes 
+uint64 read_merged_count 
+uint64 write_merged_count 
+uint64 busy_time 
+rcp/diskpartition[] partitions

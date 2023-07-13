@@ -1,0 +1,10 @@
+float64 user
+float64 system
+float64 idle 
+float64 nice 
+float64 iowait
+float64 irq
+float64 softirq
+float64 steal 
+float64 guest
+float64 guest_nice

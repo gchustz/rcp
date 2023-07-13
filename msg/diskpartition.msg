@@ -1,0 +1,10 @@
+string device 
+string mountpoint 
+float32 percent 
+uint64 total 
+uint64 used 
+uint64 free 
+string fstype
+string opts
+uint16 maxfile 
+uint16 maxpath
