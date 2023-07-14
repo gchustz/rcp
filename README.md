@@ -1,5 +1,5 @@
 # RCP - ROS Compute Performance Nodes
-This is a ros-wrapper for psutil to provide visibility into the monitoring of compute system resources and individual processes.
+This is a ros-wrapper for psutil to provide visibility compute system resources utilization systemwide and for individual processes.
 
 *Note: Currently only supporting Linux*
 
@@ -25,11 +25,13 @@ Statistics, usage, and counters for:
 - Swap
 - Disks
 - Network Interfaces
-- (WIP) Temperature Sensors
+- Temperature Sensors
 
 `roslaunch rcp system_perf.launch`
 
 Which starts topic `/system`
+
+*The above are sourced from [psutil](https://psutil.readthedocs.io/en/latest/).*
 
 ### Process Monitoring
 Per process:
@@ -61,7 +63,7 @@ Which starts topic `/system/nvidia_gpu`
 ## Future Plans
 - [X] Incorporate NVIDIA GPU statistics
 - [ ] Incorporate deeper NVIDIA GPU statistics (i.e. memory temperatures)
-- [ ] Add temperature sensors from psutil
+- [X] Add temperature sensors from psutil
 - [X] Move Configuration values out to launch file arguments / config files
 - [ ] Refactor and move the backend into a separate github
 - [ ] Build ROS2 implementation
