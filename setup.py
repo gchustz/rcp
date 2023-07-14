@@ -21,7 +21,7 @@ setup_args = generate_distutils_setup(
         'Programming Language :: Python :: 3',
         'Topic :: Communications'
     ],
-    url='http://github.com/dalymople/ubxtranslator',
+    url='http://github.com/gchustz/rcp',
     author='George Chustz',
     author_email='george.chustz@gmail.com',
     license='GNU GPL v3',

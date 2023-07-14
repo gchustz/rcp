@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 nvmlInit()
 
+
 @dataclass
 class GpuProcess:
     pid: int
@@ -31,6 +32,7 @@ class GpuDevice:
     power_usage: int
     temperature: int
 
+
 @dataclass
 class GpuSystem:
     cuda_version: str
@@ -39,6 +41,8 @@ class GpuSystem:
     gpus: list
 
 # Information fetchers
+
+
 class GpuDeviceFetcher:
     def __init__(self, index):
         self.index = index
@@ -75,10 +79,11 @@ class GpuDeviceFetcher:
             graphics_processes=[GpuProcess(pid=process.pid, used_memory=process.usedGpuMemory, instance_id=process.gpuInstanceId,
                                            compute_instance_id=process.computeInstanceId) for process in _graphics_processes],
             compute_processes=[GpuProcess(pid=process.pid, used_memory=process.usedGpuMemory, instance_id=process.gpuInstanceId,
-                                           compute_instance_id=process.computeInstanceId) for process in _compute_processes],
+                                          compute_instance_id=process.computeInstanceId) for process in _compute_processes],
             power_usage=_power_usage,
             temperature=_gpu_temperature
         )
+
 
 class GpuSystemFetcher:
     def __init__(self):
@@ -86,8 +91,9 @@ class GpuSystemFetcher:
         self.cuda_version = str(nvmlSystemGetCudaDriverVersion())
         self.driver_version = str(nvmlSystemGetDriverVersion())
         self.device_count = nvmlDeviceGetCount()
-        
-        self.gpu_fetchers = [GpuDeviceFetcher(idx) for idx in range(self.device_count)]
+
+        self.gpu_fetchers = [GpuDeviceFetcher(
+            idx) for idx in range(self.device_count)]
 
     def fetch(self):
         return GpuSystem(
@@ -96,7 +102,7 @@ class GpuSystemFetcher:
             gpu_count=self.device_count,
             gpus=[gpu.fetch() for gpu in self.gpu_fetchers]
         )
-    
+
     def close(self):
         nvmlShutdown()
 
@@ -104,6 +110,7 @@ class GpuSystemFetcher:
 def main():
     gsf = GpuSystemFetcher()
     print(gsf.fetch())
+
 
 if __name__ == '__main__':
     main()

@@ -35,7 +35,7 @@ class ProcessInfoPublisher:
 
         self.msg.processes = [Process(**asdict(process))
                               for process in self._processes]
-        
+
         self.publisher.publish(self.msg)
 
     def publish_loop(self):
@@ -43,11 +43,13 @@ class ProcessInfoPublisher:
             self.publish()
             self.rate.sleep()
 
+
 def main():
     topic = str(rospy.get_param('/process_info/publish_topic'))
     rate = int(rospy.get_param('/process_info/publish_rate'))
     p = ProcessInfoPublisher('process_info_node', topic, rate, 10)
     p.publish_loop()
+
 
 if __name__ == '__main__':
     main()

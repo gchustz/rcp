@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import re
 
 # Globals
-#DISK_NAME_LABEL = 'name'
+# DISK_NAME_LABEL = 'name'
 KEY_PARTITIONS = 'partitions'
 RE_PATTERN_PARTITION_DEVICES = re.compile(
     "^(\/dev/\d([a-z])([0-9]+)|\/dev\/nvme([0-9]+)n([0-9]+)p([0-9]+))$")
@@ -84,8 +84,10 @@ NONE_TO_BLANK = [
     KEY_TERMINAL
 ]
 
-ZEROED_IO_COUNTERS = psutil._pslinux.pio(read_count=0, write_count=0, read_bytes=0, write_bytes=0, read_chars=0, write_chars=0)
-ZEROED_MEM_INFO = psutil._pslinux.pmem(rss=0, vms=0, shared=0, text=0, lib=0, data=0, dirty=0)
+ZEROED_IO_COUNTERS = psutil._pslinux.pio(
+    read_count=0, write_count=0, read_bytes=0, write_bytes=0, read_chars=0, write_chars=0)
+ZEROED_MEM_INFO = psutil._pslinux.pmem(
+    rss=0, vms=0, shared=0, text=0, lib=0, data=0, dirty=0)
 
 KEY_CTX_SWITCHES_VOLUNTARY = 'ctx_switches_voluntary'
 KEY_CTX_SWITCHES_INVOLUNTARY = 'ctx_switches_involuntary'
@@ -107,6 +109,8 @@ REMOVE_KEYS = [
 ]
 
 # Data classes
+
+
 @dataclass
 class CpuCore:
     percent_usage: float
@@ -124,6 +128,7 @@ class Cpu:
     soft_interrupts: int
     syscalls: int
     cpus: list
+
 
 @dataclass
 class DiskPartition:
@@ -171,6 +176,7 @@ class NIC:
     mtu: int
     flags: str
 
+
 @dataclass
 class SystemPerf:
     cpu: Cpu
@@ -180,9 +186,10 @@ class SystemPerf:
     network_interfaces: list
     temperature_sensors: list
 
+
 @dataclass
 class Process:
-    name: str  
+    name: str
     username: str
     pid: int
     ppid: int
@@ -191,15 +198,15 @@ class Process:
     memory_percent: float
     create_time: float
     exe: str
-    cmdline: list 
+    cmdline: list
     terminal: str
     environ: dict
     cwd: str
-    nice: int 
+    nice: int
     ionice: int
     cpu_num: int
     num_threads: int
-    cpu_affinity: list 
+    cpu_affinity: list
     ctx_switches_voluntary: int
     ctx_switches_involuntary: int
     cpu_times: namedtuple
@@ -215,8 +222,11 @@ class Process:
     gid_saved: int
 
 # Helper functions:
+
+
 def namedtuple_to_dict(namedtuple):
     return dict(namedtuple._asdict())
+
 
 def get_cpu_info():
     # Reference: https://psutil.readthedocs.io/en/latest/#cpu
@@ -247,6 +257,7 @@ def get_cpu_info():
     )
 
     return ret
+
 
 def get_disk_info(*device_exclusions):
     # Device exclusions should be written in a way that abide by fnmatch.fnmatch if is indentend match (i.e. *loop* for /dev/loop3000)
@@ -297,6 +308,7 @@ def get_disk_info(*device_exclusions):
 
     return disks
 
+
 def get_nic_info(*nic_exclusions):
     nics = []
 
@@ -324,6 +336,7 @@ def get_nic_info(*nic_exclusions):
 
     return nics
 
+
 def get_system_perf_info(disk_device_exlusions: list, nic_exclusions: list):
     return SystemPerf(
         cpu=get_cpu_info(),
@@ -331,16 +344,18 @@ def get_system_perf_info(disk_device_exlusions: list, nic_exclusions: list):
         swap=psutil.swap_memory(),
         disks=get_disk_info(*disk_device_exlusions),
         network_interfaces=get_nic_info(*nic_exclusions),
-        temperature_sensors=[] # TODO: add this functionality back when on actual baremetal
+        temperature_sensors=[]  # TODO: add this functionality back when on actual baremetal
     )
+
 
 def make_process(**process_dict):
     for key in NONE_TO_BLANK:
         process_dict[key] = '' if process_dict[key] is None else process_dict[key]
-    
+
     process_dict[KEY_NUM_FDS] = 0 if process_dict[KEY_NUM_FDS] is None else process_dict[KEY_NUM_FDS]
     process_dict[KEY_IO_COUNTERS] = ZEROED_IO_COUNTERS if process_dict[KEY_IO_COUNTERS] is None else process_dict[KEY_IO_COUNTERS]
-    process_dict[KEY_ENVIRON] = {} if process_dict[KEY_ENVIRON] is None else process_dict[KEY_ENVIRON]
+    process_dict[KEY_ENVIRON] = {
+    } if process_dict[KEY_ENVIRON] is None else process_dict[KEY_ENVIRON]
     process_dict[KEY_CTX_SWITCHES_VOLUNTARY] = process_dict[KEY_CTX_SWITCHES].voluntary
     process_dict[KEY_CTX_SWITCHES_INVOLUNTARY] = process_dict[KEY_CTX_SWITCHES].involuntary
     process_dict[KEY_UID_REAL] = process_dict[KEY_UIDS].real
@@ -356,8 +371,10 @@ def make_process(**process_dict):
 
     return Process(**process_dict)
 
+
 def get_processes_info():
     return [make_process(**proc_dict.as_dict()) for proc_dict in psutil.process_iter(attrs=PROCESS_ATTRS)]
+
 
 def main():
     for proc in get_processes_info():
@@ -367,8 +384,9 @@ def main():
     print()
     print(get_disk_info('*loop*'))
     print()
-    print(get_nic_info('*lo*'))    
+    print(get_nic_info('*lo*'))
     print()
+
 
 if __name__ == '__main__':
     main()
