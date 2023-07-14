@@ -20,7 +20,7 @@ add_message_files(
     CpuTimes.msg
     Memory.msg
     Swap.msg
-    Disks.msg 
+    Disk.msg 
     DiskPartition.msg
     NetworkInterface.msg
     TemperatureSensor.msg
@@ -29,11 +29,14 @@ add_message_files(
     ProcessCpuTimes.msg
     Thread.msg
     Process.msg
+    ProcessArray.msg
+    SystemPerf.msg
 )
 
 # Generate messages
 generate_messages(
     DEPENDENCIES
+    std_msgs
     rcp
 )
 
