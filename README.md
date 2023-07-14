@@ -11,7 +11,7 @@ This is a ros-wrapper for psutil to provide visibility into the monitoring of co
 
 `pip3 install psutil==5.9.5` *Note: Current ros1 / Ubuntu 20.04 build psutil is broken.
 
-*Optional for Nvidia GPU support:* `pip3 install pynvml`
+*Optional* `pip3 install pynvml=11.5.0`
 
 `cd <your/workspace/>`
 
@@ -42,6 +42,25 @@ Per process:
 
 Which starts topic `/system/processes`
 
+### NVIDIA GPU Monitoring
+Utilization for:
+- Gpu processor
+- Gpu Memory
+- Encoder
+- Decoder
+
+Along with other values such as temperature, powerdraw, and per-process information
+
+`roslaunch rcp nvidia_gpu.launch`
+
+Which starts topic `/system/nvidia_gpu`
+
+### All of the above
+`roslaunch rcp all.launch`
+
 ## Future Plans
-- [ ] Incorporate NVIDIA GPU statistics
+- [X] Incorporate NVIDIA GPU statistics
+- [ ] Incorporate deeper NVIDIA GPU statistics (i.e. memory temperatures)
+- [ ] Add temperature sensors from psutil
+- [ ] Move Configuration values out to launch file arguments / config files
 - [ ] Refactor and move the backend into a separate github
