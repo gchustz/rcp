@@ -2,9 +2,6 @@
 from pynvml import *
 from dataclasses import dataclass
 
-nvmlInit()
-
-
 @dataclass
 class GpuProcess:
     pid: int
@@ -40,6 +37,15 @@ class GpuSystem:
     gpu_count: int
     gpus: list
 
+
+# Helper functions
+def NVML_exception_catcher(fnc, *fn_args, default_value=None, **fn_kwargs):
+    try:
+        return fnc(*fn_args, **fn_kwargs)
+    except Exception as e:
+        return default_value
+
+
 # Information fetchers
 
 
@@ -48,9 +54,9 @@ class GpuDeviceFetcher:
         self.index = index
         self.h = nvmlDeviceGetHandleByIndex(self.index)
         self.name = str(nvmlDeviceGetName(self.h))
-        self.board_id = str(nvmlDeviceGetBoardId(self.h))
-        self.serial = str(nvmlDeviceGetSerial(self.h))
-        self.uuid = str(nvmlDeviceGetUUID(self.h))
+        self.board_id = str(NVML_exception_catcher(nvmlDeviceGetBoardId , self.h, default_value=''))
+        self.serial = str(NVML_exception_catcher(nvmlDeviceGetSerial, self.h, default_value=''))
+        self.uuid = str(NVML_exception_catcher(nvmlDeviceGetUUID, self.h, default_value=''))
 
     def fetch(self):
         _usage = nvmlDeviceGetUtilizationRates(self.h)
