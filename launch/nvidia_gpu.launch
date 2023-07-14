@@ -1,5 +1,8 @@
 <launch>
-
-<node name="nvidia_gpu_info" pkg="rcp" type="nvidia_gpu" output="screen"/>
-
+    <arg name="publish_topic" default="/system/nvidia_gpu"/>
+    <arg name="publish_rate" default="10" />
+    <node name="nvidia_gpu_info" pkg="rcp" type="nvidia_gpu" output="screen">
+        <param name="publish_topic" value="$(arg publish_topic)" />
+        <param name="publish_rate" value="$(arg publish_rate)" />
+    </node>
 </launch>

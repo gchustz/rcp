@@ -10,7 +10,7 @@ import re
 #DISK_NAME_LABEL = 'name'
 KEY_PARTITIONS = 'partitions'
 RE_PATTERN_PARTITION_DEVICES = re.compile(
-    "^(\/dev/\sd([a-z])([0-9]+)|\/dev\/nvme([0-9]+)n([0-9]+)p([0-9]+))$")
+    "^(\/dev/\d([a-z])([0-9]+)|\/dev\/nvme([0-9]+)n([0-9]+)p([0-9]+))$")
 
 DUPLEX_STRS = {
     psutil.NIC_DUPLEX_UNKNOWN: 'unknown',

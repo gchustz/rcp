@@ -60,8 +60,12 @@ class SystemPerfPublisher:
 
 
 def main():
+    topic = str(rospy.get_param('/system_perf/publish_topic'))
+    rate = int(rospy.get_param('/system_perf/publish_rate'))
+    disk_exclusions = rospy.get_param('/system_perf/disk_exclusions')
+    nic_exclusions = rospy.get_param('/system_perf/nic_exclusions')
     p = SystemPerfPublisher(
-        'system_perf_node', '/system/system', 10, 10, ['*loop*'], ['*lo*'])
+        'system_perf_node', topic, rate, 10, disk_exclusions, nic_exclusions)
     p.publish_loop()
 
 
