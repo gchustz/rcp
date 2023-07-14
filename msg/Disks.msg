@@ -6,4 +6,4 @@ uint64 write_bytes
 uint64 read_merged_count 
 uint64 write_merged_count 
 uint64 busy_time 
-rcp/diskpartition[] partitions
+rcp/DiskPartition[] partitions

@@ -1,0 +1,3 @@
+float32 percent_usage
+rcp/CpuTimes mode_times
+rcp/CpuTimes mode_usages

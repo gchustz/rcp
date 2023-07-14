@@ -14,15 +14,21 @@ catkin_python_setup()
 add_message_files(
     DIRECTORY msg
     FILES 
-    cpu.msg
-    cpucore.msg
-    cputimes.msg
-    memory.msg
-    swap.msg
-    disks.msg 
-    diskpartition.msg
-    networkinterface.msg
-    temperaturesensor.msg
+    KeyValue.msg
+    Cpu.msg
+    CpuCore.msg
+    CpuTimes.msg
+    Memory.msg
+    Swap.msg
+    Disks.msg 
+    DiskPartition.msg
+    NetworkInterface.msg
+    TemperatureSensor.msg
+    ProcessMemInfo.msg
+    ProcessIoCounters.msg
+    ProcessCpuTimes.msg
+    Thread.msg
+    Process.msg
 )
 
 # Generate messages

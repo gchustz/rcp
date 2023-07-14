@@ -1,3 +1,0 @@
-float32 percent_usage
-rcp/cputimes mode_times
-rcp/cputimes mode_usages
