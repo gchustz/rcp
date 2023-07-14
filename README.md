@@ -29,7 +29,7 @@ Statistics, usage, and counters for:
 
 `roslaunch rcp system_perf.launch`
 
-Which starts topic `/system/system`
+Which starts topic `/system`
 
 ### Process Monitoring
 Per process:
