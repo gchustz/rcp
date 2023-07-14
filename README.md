@@ -39,3 +39,7 @@ Per process:
 `roslaunch rcp processes.launch`
 
 Which starts topic `/system/processes`
+
+## Future Plans
+- [ ] Incorporate NVIDIA GPU statistics
+- [ ] Refactor and move the backend into a separate github
