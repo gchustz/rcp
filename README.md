@@ -62,5 +62,5 @@ Which starts topic `/system/nvidia_gpu`
 - [X] Incorporate NVIDIA GPU statistics
 - [ ] Incorporate deeper NVIDIA GPU statistics (i.e. memory temperatures)
 - [ ] Add temperature sensors from psutil
-- [ ] Move Configuration values out to launch file arguments / config files
+- [X] Move Configuration values out to launch file arguments / config files
 - [ ] Refactor and move the backend into a separate github
