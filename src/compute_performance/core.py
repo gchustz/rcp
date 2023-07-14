@@ -172,6 +172,15 @@ class NIC:
     flags: str
 
 @dataclass
+class SystemPerf:
+    cpu: Cpu
+    memory: namedtuple
+    swap: namedtuple
+    disks: list
+    network_interfaces: list
+    temperature_sensors: list
+
+@dataclass
 class Process:
     name: str  
     username: str
@@ -308,6 +317,16 @@ def get_nic_info(*nic_exclusions):
             )
 
     return nics
+
+def get_system_perf_info(disk_device_exlusions: list, nic_exclusions: list):
+    return SystemPerf(
+        cpu=get_cpu_info(),
+        memory=psutil.virtual_memory(),
+        swap=psutil.swap_memory(),
+        disks=get_disk_info(*disk_device_exlusions),
+        network_interfaces=get_nic_info(*nic_exclusions),
+        temperature_sensors=[] # TODO: add this functionality back when on actual baremetal
+    )
 
 def make_process(**process_dict):
     for key in NONE_TO_BLANK:
