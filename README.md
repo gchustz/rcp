@@ -64,3 +64,4 @@ Which starts topic `/system/nvidia_gpu`
 - [ ] Add temperature sensors from psutil
 - [X] Move Configuration values out to launch file arguments / config files
 - [ ] Refactor and move the backend into a separate github
+- [ ] Build ROS2 implementation
