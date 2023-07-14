@@ -43,7 +43,9 @@ class NvidiaGpuPublisher:
     
 def main():
     try:
-        p = NvidiaGpuPublisher('nvida_gpu_node', '/system/nvidia_gpu', 10, 10)
+        topic = str(rospy.get_param('/nvidia_gpu_info/publish_topic'))
+        rate = int(rospy.get_param('/nvidia_gpu_info/publish_rate'))
+        p = NvidiaGpuPublisher('nvidia_gpu_info_node', topic, rate, 10)
         p.publish_loop()
     except KeyboardInterrupt:
         p.fetcher.close()

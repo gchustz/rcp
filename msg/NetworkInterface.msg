@@ -10,6 +10,6 @@ uint64 dropout
 bool isup 
 string duplex 
 uint32 speed 
-uint16 mtu 
+uint32 mtu 
 string flags
 

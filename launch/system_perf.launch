@@ -1,5 +1,11 @@
 <launch>
-
-<node name="system_perf" pkg="rcp" type="system_perf" output="screen"/>
+    <arg name="publish_topic" default="/system"/>
+    <arg name="publish_rate" default="10" />
+    <rosparam param="disk_exclusions">["*loop*"]</rosparam>
+    <rosparam param="nic_exclusions">["*lo*"]</rosparam>
+    <node name="system_perf" pkg="rcp" type="system_perf" output="screen">
+        <param name="publish_topic" value="$(arg publish_topic)" />
+        <param name="publish_rate" value="$(arg publish_rate)" />
+    </node>
 
 </launch>
