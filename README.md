@@ -1,3 +1,36 @@
-# RCP
+# RCP - ROS Compute Performance Nodes
+This is a ros-wrapper for psutil to provide visibility into the monitoring of compute system resources and individual processes.
 
 *Note: Currently only supporting Linux*
+
+## Installation
+`cd <your/workspace>/src/`
+`git clone https://github.com/gchustz/rcp` (or `git clone git@github.com:gchustz/rcp` for ssh)
+`pip3 install psutil==5.9.5` *Note: Current ros1 / Ubuntu 20.04 build psutil is broken.
+`cd <your/workspace/>`
+`catkin_make``
+
+## Usage
+### System Performance
+Statistics, usage, and counters for:
+- CPU
+- Memory
+- Swap
+- Disks
+- Network Interfaces
+- (WIP) Temperature Sensors
+
+`roslaunch rcp system_perf.launch`
+
+Which starts topic `/system/system`
+
+### Process Monitoring
+Per process:
+- CPU utilization
+- Memory
+- I/O
+- etc.
+
+`roslaunch rcp processes.launch`
+
+Which starts topic `/system/processes`
