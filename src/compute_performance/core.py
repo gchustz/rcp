@@ -178,6 +178,15 @@ class NIC:
 
 
 @dataclass
+class TempSensor:
+    label: str 
+    group: str 
+    current: float 
+    high: float 
+    critical: float
+
+
+@dataclass
 class SystemPerf:
     cpu: Cpu
     memory: namedtuple
@@ -222,8 +231,6 @@ class Process:
     gid_saved: int
 
 # Helper functions:
-
-
 def namedtuple_to_dict(namedtuple):
     return dict(namedtuple._asdict())
 
@@ -336,6 +343,22 @@ def get_nic_info(*nic_exclusions):
 
     return nics
 
+def get_temperature_sensors():
+    _temp_dict = psutil.sensors_temperatures()
+
+    # Build a list of temperature sensor objects
+    temp_sensors = []
+    for group_label, group_list in _temp_dict.items():
+        for sensor in group_list:
+            temp_sensors.append(
+                TempSensor(group=group_label, **namedtuple_to_dict(sensor))
+            )
+
+    return temp_sensors
+
+
+
+    
 
 def get_system_perf_info(disk_device_exlusions: list, nic_exclusions: list):
     return SystemPerf(
@@ -344,7 +367,7 @@ def get_system_perf_info(disk_device_exlusions: list, nic_exclusions: list):
         swap=psutil.swap_memory(),
         disks=get_disk_info(*disk_device_exlusions),
         network_interfaces=get_nic_info(*nic_exclusions),
-        temperature_sensors=[]  # TODO: add this functionality back when on actual baremetal
+        temperature_sensors=get_temperature_sensors()
     )
 
 
