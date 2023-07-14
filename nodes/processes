@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+from rcp.msg import KeyValue, Process, ProcessArray, ProcessCpuTimes, ProcessIoCounters, ProcessMemInfo, Thread
+from compute_performance import get_processes_info, namedtuple_to_dict
+from dataclasses import asdict
+import rospy
+
+
+class ProcessInfoPublisher:
+    def __init__(self, node_name: str, publish_topic: str, publish_rate: int, queue_size: int):
+        rospy.init_node(node_name)
+        self.publisher = rospy.Publisher(
+            publish_topic, ProcessArray, queue_size=queue_size)
+        self.rate = rospy.Rate(publish_rate)
+        self.msg = ProcessArray()
+        self.msg.header.frame_id = ''
+        self.seq = 0
+        # Initial to test and get reference value
+        self._processes = get_processes_info()
+
+    def publish(self):
+        self.msg.header.seq = self.seq
+        self.msg.header.stamp = rospy.get_rostime()
+
+        self._processes = get_processes_info()
+
+        for process in self._processes:
+            process.environ = [KeyValue(k, v)
+                               for k, v in process.environ.items()]
+            process.cpu_times = ProcessCpuTimes(
+                **namedtuple_to_dict(process.cpu_times))
+            process.memory_info = ProcessMemInfo(
+                **namedtuple_to_dict(process.memory_info))
+            process.io_counters = ProcessIoCounters(
+                **namedtuple_to_dict(process.io_counters))
+
+        self.msg.processes = [Process(**asdict(process))
+                              for process in self._processes]
+        
+        self.publisher.publish(self.msg)
+
+    def publish_loop(self):
+        while not rospy.is_shutdown():
+            self.publish()
+            self.rate.sleep()
+
+def main():
+    p = ProcessInfoPublisher('process_info_node', '/system/processes', 1, 10)
+    p.publish_loop()
+
+if __name__ == '__main__':
+    main()

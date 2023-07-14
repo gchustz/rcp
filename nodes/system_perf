@@ -1,26 +1,32 @@
 #!/usr/bin/env python3
-from rcp.msg import *
-from compute_performance import get_system_perf_info
+from rcp.msg import Cpu, CpuCore, CpuTimes, Disk, DiskPartition, Memory, NetworkInterface, Swap, SystemPerf, TemperatureSensor
+from compute_performance import get_system_perf_info, namedtuple_to_dict
 from dataclasses import asdict
 import rospy
 
-def namedtuple_to_dict(named_tuple):
-    return dict(named_tuple._asdict())
 
 class SystemPerfPublisher:
     def __init__(self, node_name: str, publish_topic: str, publish_rate: int, queue_size: int, disk_device_exclusions: list, nic_exclusions: list):
         rospy.init_node(node_name)
         self.disk_device_exclusions = disk_device_exclusions
         self.nic_exclusions = nic_exclusions
-        self.publisher = rospy.Publisher(publish_topic, SystemPerf, queue_size=queue_size)
+        self.publisher = rospy.Publisher(
+            publish_topic, SystemPerf, queue_size=queue_size)
         self.rate = rospy.Rate(publish_rate)
         self.msg = SystemPerf()
-        self._info = get_system_perf_info(self.disk_device_exclusions, self.nic_exclusions)
+        self.msg.header.frame_id = ''
+        self._info = get_system_perf_info(
+            self.disk_device_exclusions, self.nic_exclusions)
+        self.seq = 0
 
     def publish(self):
-        self._info = get_system_perf_info(self.disk_device_exclusions, self.nic_exclusions)
-        
-        self._info.cpu.cpus = [CpuCore(percent_usage=cpucore.percent_usage, mode_times=CpuTimes(**namedtuple_to_dict(cpucore.mode_times)), mode_usages=CpuTimes(**namedtuple_to_dict(cpucore.mode_usages))) for cpucore in self._info.cpu.cpus]
+        self.msg.header.stamp = rospy.get_rostime()
+        self.msg.header.seq = self.seq
+        self._info = get_system_perf_info(
+            self.disk_device_exclusions, self.nic_exclusions)
+
+        self._info.cpu.cpus = [CpuCore(percent_usage=cpucore.percent_usage, mode_times=CpuTimes(**namedtuple_to_dict(
+            cpucore.mode_times)), mode_usages=CpuTimes(**namedtuple_to_dict(cpucore.mode_usages))) for cpucore in self._info.cpu.cpus]
         _cpu_dict = asdict(self._info.cpu)
         self.msg.cpu = Cpu(**_cpu_dict)
 
@@ -31,25 +37,33 @@ class SystemPerfPublisher:
         self.msg.swap = Swap(**_swap_dict)
 
         for disk in self._info.disks:
-            disk.partitions = [DiskPartition(**asdict(partition)) for partition in disk.partitions]
-            #disk = Disk(**asdict(disk))
+            disk.partitions = [DiskPartition(
+                **asdict(partition)) for partition in disk.partitions]
+            # disk = Disk(**asdict(disk))
 
         self.msg.disks = [Disk(**asdict(disk)) for disk in self._info.disks]
 
-        self.msg.network_interfaces = [NetworkInterface(**asdict(nic)) for nic in self._info.network_interfaces]
+        self.msg.network_interfaces = [NetworkInterface(
+            **asdict(nic)) for nic in self._info.network_interfaces]
 
-        self.msg.temperature_sensors = [TemperatureSensor(**asdict(temp_sensor)) for temp_sensor in self._info.temperature_sensors]
+        self.msg.temperature_sensors = [TemperatureSensor(
+            **asdict(temp_sensor)) for temp_sensor in self._info.temperature_sensors]
 
         self.publisher.publish(self.msg)
+
+        self.seq += 1
 
     def publish_loop(self):
         while not rospy.is_shutdown():
             self.publish()
             self.rate.sleep()
 
+
 def main():
-    p = SystemPerfPublisher('system_perf_node', '/system/system', 10, 10, ['*loop*'], ['*lo*'])
+    p = SystemPerfPublisher(
+        'system_perf_node', '/system/system', 10, 10, ['*loop*'], ['*lo*'])
     p.publish_loop()
-    
+
+
 if __name__ == '__main__':
     main()

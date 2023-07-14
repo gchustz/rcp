@@ -214,6 +214,10 @@ class Process:
     gid_effective: int
     gid_saved: int
 
+# Helper functions:
+def namedtuple_to_dict(namedtuple):
+    return dict(namedtuple._asdict())
+
 def get_cpu_info():
     # Reference: https://psutil.readthedocs.io/en/latest/#cpu
 
@@ -264,7 +268,7 @@ def get_disk_info(*device_exclusions):
             include = False
 
         if include:
-            disks_dict[disk_device_name] = dict(disk_io._asdict())
+            disks_dict[disk_device_name] = namedtuple_to_dict(disk_io)
             # Empty list to house any partitions found in the following steps
             disks_dict[disk_device_name][KEY_PARTITIONS] = []
 
@@ -274,9 +278,9 @@ def get_disk_info(*device_exclusions):
         match_name = '*' + device_name + '*'
         for partition in _partitions:
             if fnmatch.fnmatch(partition.device, match_name):
-                _partition_dict = dict(partition._asdict())
+                _partition_dict = namedtuple_to_dict(partition)
                 _partition_usage = psutil.disk_usage(partition.mountpoint)
-                _partition_usage = dict(_partition_usage._asdict())
+                _partition_usage = namedtuple_to_dict(_partition_usage)
 
                 disk_info[KEY_PARTITIONS].append(
                     DiskPartition(**_partition_dict, **_partition_usage)
@@ -309,8 +313,8 @@ def get_nic_info(*nic_exclusions):
                 break
 
         if include:
-            _nic_stats_dict = dict(_nic_stats[nic_name]._asdict())
-            _nic_io_dict = dict(_nic_ios[nic_name]._asdict())
+            _nic_stats_dict = namedtuple_to_dict(_nic_stats[nic_name])
+            _nic_io_dict = namedtuple_to_dict(_nic_ios[nic_name])
             # Correct the duplex
             _nic_stats_dict['duplex'] = DUPLEX_STRS[_nic_stats_dict['duplex']]
 

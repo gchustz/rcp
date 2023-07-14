@@ -1,0 +1,5 @@
+<launch>
+
+<node name="process_info" pkg="rcp" type="processes" output="screen"/>
+
+</launch>

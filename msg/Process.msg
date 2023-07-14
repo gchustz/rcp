@@ -19,7 +19,7 @@ uint32[] cpu_affinity
 uint64 ctx_switches_voluntary
 uint64 ctx_switches_involuntary
 rcp/ProcessCpuTimes cpu_times
-rcp/ProcessMemInfo mem_info
+rcp/ProcessMemInfo memory_info
 uint32 num_fds
 rcp/ProcessIoCounters io_counters
 rcp/Thread[] threads
