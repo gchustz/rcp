@@ -4,11 +4,16 @@ This is a ros-wrapper for psutil to provide visibility into the monitoring of co
 *Note: Currently only supporting Linux*
 
 ## Installation
+
 `cd <your/workspace>/src/`
+
 `git clone https://github.com/gchustz/rcp` (or `git clone git@github.com:gchustz/rcp` for ssh)
+
 `pip3 install psutil==5.9.5` *Note: Current ros1 / Ubuntu 20.04 build psutil is broken.
+
 `cd <your/workspace/>`
-`catkin_make``
+
+`catkin_make`
 
 ## Usage
 ### System Performance
