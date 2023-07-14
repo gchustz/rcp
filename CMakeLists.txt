@@ -31,6 +31,9 @@ add_message_files(
     Process.msg
     ProcessArray.msg
     SystemPerf.msg
+    NvidiaGpuProcess.msg
+    NvidiaGpuDevice.msg
+    NvidiaGpuSystem.msg
 )
 
 # Generate messages

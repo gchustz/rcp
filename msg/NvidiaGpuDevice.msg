@@ -1,0 +1,16 @@
+string name
+string board_id
+string serial
+string uuid
+uint32 index
+uint16 gpu_usage
+uint16 memory_usage
+uint64 memory_total
+uint64 memory_free
+uint64 memory_used
+uint16 encoder_usage
+uint16 decoder_usage
+rcp/NvidiaGpuProcess[] graphics_processes
+rcp/NvidiaGpuProcess[] compute_processes
+uint32 power_usage
+int32 temperature

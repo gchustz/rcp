@@ -1,0 +1,4 @@
+uint32 pid
+uint64 used_memory
+uint64 instance_id
+uint64 compute_instance_id

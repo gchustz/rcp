@@ -11,6 +11,8 @@ This is a ros-wrapper for psutil to provide visibility into the monitoring of co
 
 `pip3 install psutil==5.9.5` *Note: Current ros1 / Ubuntu 20.04 build psutil is broken.
 
+*Optional for Nvidia GPU support:* `pip3 install pynvml`
+
 `cd <your/workspace/>`
 
 `catkin_make`

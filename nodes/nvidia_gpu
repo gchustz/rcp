@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+from compute_performance.nvidia import GpuSystemFetcher
+from rcp.msg import NvidiaGpuProcess, NvidiaGpuDevice, NvidiaGpuSystem
+import rospy
+from dataclasses import asdict 
+
+class NvidiaGpuPublisher:
+    def __init__(self, node_name, publish_topic, publish_rate, queue_size):
+        rospy.init_node(node_name)
+        self.publisher = rospy.Publisher(publish_topic, NvidiaGpuSystem, queue_size=queue_size)
+        self.rate = rospy.Rate(publish_rate)
+        self.fetcher = GpuSystemFetcher()
+        self.msg = NvidiaGpuSystem()
+        self.msg.header.frame_id = ''
+        self.msg.cuda_version = self.fetcher.cuda_version
+        self.msg.driver_version = self.fetcher.driver_version
+        self.msg.gpu_count = self.fetcher.device_count
+        self.seq = 0
+
+
+    def publish(self):
+        self.msg.header.seq = self.seq
+        self.msg.header.stamp = rospy.get_rostime()
+
+        _gpu_info = self.fetcher.fetch()
+
+        for gpu in _gpu_info.gpus:
+            gpu.graphics_processes = [NvidiaGpuProcess(**asdict(process)) for process in gpu.graphics_processes]
+            gpu.compute_processes = [NvidiaGpuProcess(**asdict(process)) for process in gpu.compute_processes]
+
+        self.msg.gpus = [NvidiaGpuDevice(**asdict(gpu)) for gpu in _gpu_info.gpus]
+
+        self.publisher.publish(self.msg)
+
+        self.seq += 0
+    
+    def publish_loop(self):
+        while not rospy.is_shutdown():
+            self.publish()
+            self.rate.sleep()
+        
+        self.fetcher.close()
+    
+def main():
+    try:
+        p = NvidiaGpuPublisher('nvida_gpu_node', '/system/nvidia_gpu', 10, 10)
+        p.publish_loop()
+    except KeyboardInterrupt:
+        p.fetcher.close()
+        print('\nKeyboard Interrupt handled gracefully\n')
+
+if __name__ == '__main__':
+    main()
