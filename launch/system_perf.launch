@@ -1,0 +1,5 @@
+<launch>
+
+<node name="system_perf" pkg="rcp" type="system_perf" output="screen"/>
+
+</launch>

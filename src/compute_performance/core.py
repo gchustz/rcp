@@ -311,6 +311,8 @@ def get_nic_info(*nic_exclusions):
         if include:
             _nic_stats_dict = dict(_nic_stats[nic_name]._asdict())
             _nic_io_dict = dict(_nic_ios[nic_name]._asdict())
+            # Correct the duplex
+            _nic_stats_dict['duplex'] = DUPLEX_STRS[_nic_stats_dict['duplex']]
 
             nics.append(
                 NIC(name=nic_name, **_nic_io_dict, **_nic_stats_dict)

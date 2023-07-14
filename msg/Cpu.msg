@@ -1,3 +1,4 @@
+float32 percent_usage
 uint16 logical_count
 uint16 physical_count
 uint64 ctx_switches
