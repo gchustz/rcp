@@ -1,0 +1,5 @@
+<launch>
+<include file="$(find rcp)/launch/system_perf.launch"/>
+<include file="$(find rcp)/launch/processes.launch"/>
+<include file="$(find rcp)/launch/nvidia_gpu.launch"/>
+</launch>

@@ -1,0 +1,5 @@
+<launch>
+
+<node name="nvidia_gpu_info" pkg="rcp" type="nvidia_gpu" output="screen"/>
+
+</launch>
